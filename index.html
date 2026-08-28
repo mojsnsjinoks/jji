@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger House | Artisan Flame-Grilled Burgers & 3D AR Experience</title>
+
+    <!-- Meta Description for SEO -->
+    <meta name="description" content="Welcome to Burger House Artisan. Experience 100vh fullscreen hero image, 300-frame scroll video sequence, and interactive 3D AR food menu.">
+
+    <!-- Google Fonts & 3D Model Viewer -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- ==========================================
+         GLASS NAVBAR HEADER
+         ========================================== -->
+    <header id="site-header" class="site-header">
+        <div class="header-inner">
+            <!-- Brand Logo -->
+            <a href="#home" class="logo-brand">
+                <span class="logo-title">Burger House</span>
+                <span class="logo-subtitle">artisan</span>
+            </a>
+
+            <!-- Center Navigation Links -->
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#menu" class="nav-link">Menu</a></li>
+                <li><a href="#ar" class="nav-link">AR Experience</a></li>
+                <li><a href="#about" class="nav-link">About Us</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+
+            <!-- Right Actions -->
+            <div class="header-actions">
+                <a href="#menu" class="cart-icon-btn" aria-label="View Shopping Cart">
+                    🛒
+                    <span class="cart-badge">2</span>
+                </a>
+                <a href="#menu" class="btn btn-gold btn-sm">Login</a>
+                <button id="hamburger-btn" class="hamburger-btn" aria-label="Toggle Navigation Menu">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-nav-overlay" class="mobile-nav-overlay"></div>
+    <aside id="mobile-nav" class="mobile-nav">
+        <div class="mobile-nav-header">
+            <div class="logo-brand">
+                <span class="logo-title">Burger House</span>
+                <span class="logo-subtitle">artisan</span>
+            </div>
+            <button id="mobile-nav-close" class="mobile-nav-close">&times;</button>
+        </div>
+        <ul class="mobile-nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#ar">AR Experience</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a href="#menu" class="btn btn-primary" style="margin-top: auto; text-align: center;">ORDER NOW 🍔</a>
+    </aside>
+
+    <!-- ==========================================
+         1. FIRST SCREEN — FULLSCREEN HERO IMAGE & 300-FRAME SCROLL VIDEO (100vw x 100vh)
+         ========================================== -->
+    <div id="home" class="hero-scroll-wrapper">
+        <div class="hero-sticky-viewport">
+            
+            <!-- High-Res Fullscreen Background Photo -->
+            <img id="hero-bg-img" class="hero-fullscreen-img" src="pexels-vancocs-6088519.jpg" alt="Burger House Artisan Fullscreen">
+
+            <!-- Fullscreen 100vw x 100vh Canvas -->
+            <canvas id="hero-canvas" class="hero-fullscreen-canvas"></canvas>
+
+            <!-- Hero Glass Overlay -->
+            <div class="hero-overlay">
+                <div class="hero-tag">🔥 Masterpiece Flame-Grilled</div>
+                
+                <h1 class="hero-fullscreen-title font-serif">
+                    BURGER HOUSE
+                    <span>ARTISAN</span>
+                </h1>
+
+                <p class="hero-fullscreen-sub">
+                    The Legendary Flame-Grilled Cheeseburger. Our signature, perfected masterpiece crafted with premium beef and artisan ingredients.
+                </p>
+
+                <div class="hero-fullscreen-buttons">
+                    <a href="#menu" class="btn btn-primary">EXPLORE MENU 🍔</a>
+                    <a href="#about" class="btn btn-secondary">OUR STORY →</a>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator">
+                <div class="mouse-icon"><div class="mouse-wheel"></div></div>
+                <span>SCROLL DOWN</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         2. ABOUT OUR STORY SECTION
+         ========================================== -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-grid">
+                <!-- Content -->
+                <div class="about-content">
+                    <div class="hero-tag" style="margin-bottom: 16px;">Our Origins</div>
+                    <h2>ABOUT OUR STORY</h2>
+                    <p class="about-text">
+                        Our origins, perfected to create an unforgettable dining experience. Our passion for premium ingredients and bold flavors has defined our journey. We select only the finest cuts of beef, charbroiled over open flames to lock in rich, smoky perfection.
+                    </p>
+                    <a href="#menu" class="btn btn-primary">ORDER NOW 🍔</a>
+                </div>
+
+                <!-- Visual -->
+                <div class="about-visual">
+                    <div class="about-img-frame">
+                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="Burger House Kitchen Chef">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         3. THE ONE AND ONLY MENU & AR SECTION (INTEGRATED FROM index2.html)
+         ========================================== -->
+    <section id="menu" class="menu-section">
+        <div id="ar" class="container">
+            <div class="section-header">
+                <div class="subtitle">Interactive 3D AR Experience</div>
+                <h2 class="title">OFFICIAL RESTAURANT MENU</h2>
+                <p style="color: var(--text-secondary); margin-top: 8px;">Discover our complete collection of dishes with interactive 3D models and augmented reality previews!</p>
+            </div>
+
+            <!-- ==========================================
+                 CHEF LEO AI ARABIC CHAT EXPERIENCE
+                 ========================================== -->
+            <div id="chef-chat-widget" class="chef-chat-widget" dir="rtl">
+                <!-- Character Avatar Header Sidebar -->
+                <div class="chef-sidebar">
+                    <div class="chef-avatar-wrapper">
+                        <img id="chef-avatar-img" src="assets/chef-idle.png" alt="Chef Leo" class="chef-avatar-img chef-state-idle">
+                    </div>
+                    <div class="chef-info">
+                        <div class="chef-name-title">
+                            <span class="chef-title-name">شيف ليو</span>
+                            <span class="chef-title-badge">مضيفك الذكي 👨‍🍳</span>
+                        </div>
+                        <div id="chef-status-badge" class="chef-status-badge">شيف ليو جاهز لمساعدتك 👨‍🍳</div>
+                    </div>
+                </div>
+
+                <!-- Main Chat Conversation Thread Area -->
+                <div class="chef-chat-main">
+                    <div id="chat-thread" class="chat-thread">
+                        <!-- Initial Welcome Message from Chef Leo -->
+                        <div class="chat-msg chef-msg">
+                            <div class="msg-avatar">👨‍🍳</div>
+                            <div class="msg-content">
+                                <p class="msg-text">أهلاً بك يا فندم! أنا <strong>شيف ليو</strong> 👨‍🍳 أسألني عن الأكلة المناسبة لميزانيتك، عدد الأشخاص، أو نوع الأكل اللي بتحبه وهقترح لك أحلى الأطباق بنفسي!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Arabic Prompt Chips -->
+                    <div class="chat-quick-chips">
+                        <span class="chip-label">جرّب تسأل:</span>
+                        <button type="button" class="chat-chip" onclick="sendQuickPrompt('احنا 3 أشخاص وميزانيتنا 300 جنيه، بنحب المشويات')">🔥 3 أشخاص، ميزانية 300ج، مشويات</button>
+                        <button type="button" class="chat-chip" onclick="sendQuickPrompt('عايز حاجة خفيفة حلو ومشروب بسعر مناسب')">☕ تحلية خفيفة ومشروب</button>
+                        <button type="button" class="chat-chip" onclick="sendQuickPrompt('ساندوتش دجاج مقرمش أو برجر مشوي')">🍔 ساندوتش مقرمش أو برجر</button>
+                    </div>
+
+                    <!-- Chat Input Form -->
+                    <form id="chef-chat-form" class="chef-chat-form">
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="chat-user-input" placeholder="اسأل شيف ليو عن أكلة تناسبك..." required autocomplete="off" dir="rtl">
+                            <button type="submit" id="chat-send-btn" class="btn btn-primary chat-send-btn">
+                                <span>إرسال</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Live Search Bar -->
+            <div class="search-wrap">
+                <div class="search-inner">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="Filter menu items or categories...">
+                </div>
+            </div>
+
+            <!-- Category Filter Bar -->
+            <div class="cat-scroll" id="cat-bar">
+                <button class="cat-btn active" onclick="setCategory('all', this)">الكل</button>
+            </div>
+
+            <!-- Loader Spinner -->
+            <div id="loader">
+                <div class="spinner"></div>
+                <p style="color: var(--text-secondary);">Loading 3D AR Models...</p>
+            </div>
+
+            <!-- Dynamic Menu Grid -->
+            <div id="main-container" style="display: none;">
+                <div class="menu-grid" id="menu-grid"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         4. LOCATION & CONTACT (FIND US) SECTION
+         ========================================== -->
+    <section id="contact" class="find-us-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="subtitle">Visit Our Kitchens</div>
+                <h2 class="title">FIND US</h2>
+            </div>
+
+            <div class="find-us-grid">
+                <!-- Map Visual Card -->
+                <div class="map-card">
+                    <div class="map-icon">📍</div>
+                    <h3 style="font-family: 'Cinzel', serif; color: var(--text-primary); margin-bottom: 8px;">Interactive Map View</h3>
+                    <p style="font-size: 13px;">Gourmet Burger District & Downtown Hubs</p>
+                </div>
+
+                <!-- Location Address Info -->
+                <div class="location-details">
+                    <div class="location-item">
+                        <div class="icon">🏛️</div>
+                        <div>
+                            <h4>Restaurant Address — Branch I</h4>
+                            <p>Restaurant Street, Borgas, 00000</p>
+                            <p style="color: var(--accent-gold); font-size: 13px; margin-top: 4px;">Open: 11:00 AM – 02:00 AM</p>
+                        </div>
+                    </div>
+
+                    <div class="location-item">
+                        <div class="icon">🏬</div>
+                        <div>
+                            <h4>Restaurant's Street — Branch II</h4>
+                            <p>Borgas, 00037</p>
+                            <p style="color: var(--accent-gold); font-size: 13px; margin-top: 4px;">Open: 12:00 PM – 03:00 AM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand Info -->
+                <div class="footer-brand">
+                    <a href="#home" class="logo-brand">
+                        <span class="logo-title">Burger House</span>
+                        <span class="logo-subtitle">artisan</span>
+                    </a>
+                    <p>Artisan flame-grilled burgers, gourmet sides, and 3D AR interactive dining experience.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-btn" aria-label="Facebook">🌐</a>
+                        <a href="#" class="social-btn" aria-label="Instagram">📷</a>
+                        <a href="#" class="social-btn" aria-label="Twitter">🐦</a>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div>
+                    <h4 class="footer-title">Navigation</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="#ar">AR Experience</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Locations -->
+                <div>
+                    <h4 class="footer-title">Locations</h4>
+                    <ul class="footer-links">
+                        <li><a href="#contact">Borgas 00000</a></li>
+                        <li><a href="#contact">Borgas 00037</a></li>
+                        <li><a href="#contact">Downtown Hub</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="footer-title">Contact Us</h4>
+                    <ul class="footer-links">
+                        <li>📞 +00 123 456 789</li>
+                        <li>📧 info@burgerhouse-artisan.com</li>
+                        <li>⏰ Mon - Sun: 11:00 AM – 3:00 AM</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Burger House Artisan. All Rights Reserved. Crafted with passion.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main JavaScript Engine & Chef Character Controller -->
+    <script src="chefCharacter.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

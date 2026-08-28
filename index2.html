@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohamed Menu 🍕 | AR Experience</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #CC0000;
+            --dark: #0d0d0d;
+            --card: #181818;
+            --border: #2a2a2a;
+            --text: #ffffff;
+            --muted: #777;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background: var(--dark); color: var(--text); direction: rtl; min-height: 100vh; overflow-x: hidden; }
+
+        nav {
+            padding: 14px 16px;
+            background: var(--dark);
+            position: sticky; top: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-logo { font-weight: 900; color: var(--red); font-size: 1.3rem; }
+        .nav-logo span { color: #fff; }
+
+        .search-wrap { padding: 10px 16px 0; }
+        .search-inner { position: relative; }
+        .search-inner input {
+            width: 100%; background: var(--card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 10px 16px 10px 40px; color: var(--text);
+            font-size: 14px; outline: none; transition: 0.2s;
+        }
+        .search-inner input:focus { border-color: var(--red); }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+
+        .cat-scroll { display: flex; gap: 8px; padding: 12px 16px 8px; overflow-x: auto; scrollbar-width: none; }
+        .cat-scroll::-webkit-scrollbar { display: none; }
+        .cat-btn {
+            white-space: nowrap; padding: 7px 18px; border-radius: 100px;
+            border: 1px solid var(--border); background: var(--card);
+            color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.18s;
+        }
+        .cat-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+        .container { padding: 4px 12px 80px; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .card {
+            background: var(--card); border-radius: 16px; overflow: hidden;
+            border: 1px solid var(--border); animation: fadeUp 0.35s ease both; position: relative;
+        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card-img { height: 160px; background: #111; position: relative; overflow: hidden; }
+        
+        model-viewer {
+            width: 100%; height: 100%; background: #111;
+            --poster-color: transparent;
+        }
+        model-viewer::part(default-ar-button) { display: none !important; }
+
+        .ar-icon-btn {
+            position: absolute; bottom: 10px; left: 10px;
+            background: var(--red); border: 2px solid rgba(255,255,255,0.3);
+            width: 42px; height: 42px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 12px rgba(204,0,0,0.6); z-index: 10;
+            animation: pulse 2.5s infinite; text-decoration: none;
+        }
+        .ar-icon-btn svg { width: 22px; height: 22px; fill: white; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .card-info { padding: 10px 12px 12px; text-align: center; } /* جعل النصوص في المنتصف */
+        .card-info h3 { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+        .card-desc { font-size: 11px; color: var(--muted); margin-bottom: 8px; height: 32px; overflow: hidden; line-height: 1.4; }
+        .card-footer { display: flex; justify-content: center; align-items: center; border-top: 1px solid var(--border); padding-top: 8px; }
+        .price { font-size: 15px; font-weight: 900; color: var(--red); } /* تمييز السعر باللون الأحمر */
+        .price em { font-size: 10px; color: var(--muted); font-style: normal; margin-right: 2px; }
+
+        #loader { text-align: center; padding: 80px 20px; }
+        .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-logo">MOHAMED <span>AR MENU</span></div>
+    <span>🍕</span>
+</nav>
+
+<div class="search-wrap">
+    <div class="search-inner">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="ابحث في القائمة..." oninput="applyFilters()">
+    </div>
+</div>
+
+<div class="cat-scroll" id="cat-bar">
+    <button class="cat-btn active" onclick="setCat('all',this)">الكل</button>
+</div>
+
+<div id="loader"><div class="spinner"></div><p>جاري التحميل...</p></div>
+
+<div class="container" style="display:none" id="main-container">
+    <div class="menu-grid" id="menu-grid"></div>
+</div>
+
+<script>
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS404mMlowqwF5q4go361vc__sHIW45Ys3aoibkjzpeYFufGX6vB-d-yUHM9AAjcWzhAdVhFLvJgf-Z/pub?gid=157455087&single=true&output=csv';
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const catEmoji = { 'بيتزا':'🍕','برجر':'🍔','مشويات':'🥩','مشروبات':'🧃','حلويات':'🍮','مقبلات':'🥗' };
+
+    let allItems = [];
+    let currentCat = 'all';
+
+    async function loadMenu() {
+        try {
+            const res = await fetch(`${CSV_URL}&t=${Date.now()}`);
+            const text = await res.text();
+            const rows = text.split('\n').filter(r => r.trim());
+
+            allItems = rows.slice(1).map((row, i) => {
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                return {
+                    id: i,
+                    name: (cols[0]||'').replace(/"/g,'').trim(),
+                    price: (cols[1]||'').trim(),
+                    desc: (cols[2]||'').replace(/"/g,'').trim(),
+                    glb: (cols[3]||'').trim(),
+                    usdz: (cols[4]||'').trim(),
+                    cat: (cols[5]||'عام').trim(),
+                };
+            }).filter(i => i.name);
+
+            buildCats();
+            applyFilters();
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('main-container').style.display = 'block';
+        } catch(e) { console.error("Error loading menu"); }
+    }
+
+    function buildCats() {
+        const cats = [...new Set(allItems.map(i => i.cat))];
+        const bar = document.getElementById('cat-bar');
+        cats.forEach(c => {
+            const b = document.createElement('button');
+            b.className = 'cat-btn';
+            b.textContent = (catEmoji[c] || '🍽️') + ' ' + c;
+            b.onclick = function(){ setCat(c, this); };
+            bar.appendChild(b);
+        });
+    }
+
+    function setCat(cat, btn) {
+        currentCat = cat;
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const q = document.getElementById('search-input').value.toLowerCase();
+        let filtered = allItems;
+        if (currentCat !== 'all') filtered = filtered.filter(i => i.cat === currentCat);
+        if (q) filtered = filtered.filter(i => i.name.toLowerCase().includes(q));
+        renderItems(filtered);
+    }
+
+    function renderItems(items) {
+        const grid = document.getElementById('menu-grid');
+        grid.innerHTML = items.map((item, idx) => {
+            const hasGlb = item.glb && item.glb.startsWith('http');
+            const hasUsdz = item.usdz && item.usdz.startsWith('http');
+            
+            return `
+            <div class="card">
+                <div class="card-img">
+                    ${hasGlb ? `
+                    <model-viewer src="${item.glb}" 
+                        ${hasUsdz ? `ios-src="${item.usdz}"` : ''}
+                        ar ar-modes="scene-viewer webxr quick-look" 
+                        ar-scale="fixed" 
+                        camera-controls auto-rotate 
+                        shadow-intensity="1.5" shadow-softness="0.5"
+                        environment-image="neutral"
+                        loading="lazy">
+                    </model-viewer>` : ''}
+                    
+                    ${(hasGlb || (isIOS && hasUsdz)) ? `
+                    <a class="ar-icon-btn" href="#" 
+                       onclick="startAR(event, '${item.glb}', '${item.usdz}', '${item.name}')">
+                        <svg viewBox="0 0 24 24"><path d="M12,2L2,7V17L12,22L22,17V7L12,2M12,4.1L19.8,8L12,11.9L4.2,8L12,4.1M4,15.9V9.1L11,12.6V19.4L4,15.9M13,19.4V12.6L20,9.1V15.9L13,19.4Z"/></svg>
+                    </a>` : ''}
+                </div>
+                <div class="card-info">
+                    <h3>${item.name}</h3>
+                    <div class="card-desc">${item.desc}</div>
+                    <div class="card-footer">
+                        <div class="price">${item.price} <em>ج.م</em></div>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function startAR(e, glb, usdz, name) {
+        e.preventDefault();
+        if (isIOS && usdz) {
+            const anchor = document.createElement('a');
+            anchor.setAttribute('rel', 'ar');
+            anchor.setAttribute('href', usdz);
+            anchor.appendChild(document.createElement('img'));
+            anchor.click();
+        } else {
+            const intent = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(glb)}&mode=ar_only&title=${encodeURIComponent(name)}&resizable=true&enable_vertical_placement=false#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${encodeURIComponent(glb)};end;`;
+            window.location.href = intent;
+        }
+    }
+
+    window.onload = loadMenu;
+</script>
+</body>
+</html>
